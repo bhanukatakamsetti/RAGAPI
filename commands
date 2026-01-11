@@ -1,0 +1,25 @@
+python -m venv venv
+
+
+venv\Scripts\Activate.ps1
+
+
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+
+
+curl http://127.0.0.1:11434
+
+export MODEL_NAME="tinyllama"   for bash terminal
+
+
+$env:MODEL_NAME = "tinyllama"
+
+python -m uvicorn app:app --reload
+
+
+ollama list
+
+ollama serve
+
+
+
