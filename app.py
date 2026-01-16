@@ -3,7 +3,6 @@ load_dotenv()  # Load environment variables from .env file
 
 from fastapi import FastAPI
 import chromadb
-import ollama
 import os 
 import logging
 
@@ -12,14 +11,21 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(message)s"
 )
 
-MODEL_NAME = os.getenv("MODEL_NAME", "tinyllama")
-logging.info(f"Using model: {MODEL_NAME}")
+# MODEL_NAME = os.getenv("MODEL_NAME", "tinyllama")
+
+USE_MOCK_LLM = os.getenv("USE_MOCK_LLM", "0") == "1"
+
+if not USE_MOCK_LLM:
+    import ollama
+    ollama_client = ollama.Client(host="http://localhost:11434")
+
+# logging.info(f"Using model: {MODEL_NAME}")
 
 app = FastAPI()
 chroma = chromadb.PersistentClient(path="./chromadb")
 collection = chroma.get_or_create_collection("docs")
 # ollama_client = ollama.Client(host="http://host.docker.internal:11434")
-ollama_client = ollama.Client(host="http://localhost:11434")
+   
 
 
 @app.post("/query")
@@ -27,8 +33,12 @@ def query(q: str):
     results = collection.query(query_texts=[q], n_results=1)
     context = results["documents"][0][0] if results["documents"] else ""
 
+
+    if USE_MOCK_LLM:
+        return {"answer": context}
+
     answer = ollama_client.generate(
-        model=MODEL_NAME,
+        model="tinyllama",
         prompt=f"Context:\n{context}\n\nQuestion: {q}\n\nAnswer clearly and concisely:"
     )
 
