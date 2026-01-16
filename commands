@@ -23,3 +23,7 @@ ollama serve
 
 open -a "Ollama"
 
+
+curl -X POST "http://127.0.0.1:57207/query" -G --data-urlencode "q=What is Kubernetes?"
+
+
