@@ -11,7 +11,7 @@ with open("k8s.txt", "r") as file:
   text = file.read()
 
 
-collection.add(documents=[text], ids=["k8s"])
+collection.upsert(documents=[text], ids=["k8s"])
 
 print("Embedding stored in Chroma")
 
