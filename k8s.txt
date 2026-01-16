@@ -92,4 +92,4 @@ Production Best Practices
 Use Deployments instead of standalone Pods. Define resource requests and limits. Use namespaces for isolation. Enable RBAC. Monitor with metrics and logging systems. Centralize logs and observability.
 
 Mental Model
-Kubernetes is a distributed system that continuously reconciles actual state to the desired state defined by the user.
+Kubernetes is a distributed system that continuously reconciles actual state to the desired state defined by the user.   
